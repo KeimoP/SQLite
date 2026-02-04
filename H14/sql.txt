@@ -1,0 +1,29 @@
+.open H14/kplaas.db
+
+SELECT last_name FROM users ORDER BY id Limit 3;
+
+insert into users (first_name, last_name, email, phone, image) values ('Gabriel', 'Feafdhfdh', '346@gmail.com', '7364346254', 'http://dum.com/223x100.png/cc0000/ffffff');
+
+SELECT * FROM users WHERE first_name LIKE 'g%' AND email LIKE '%.com';
+
+insert into users (first_name, last_name, email, phone, image) values ('Eestlane', 'Feafdhfdh', '346@gmail.com', '37294390436', 'http://dum.com/223x100.png/cc0000/ffffff');
+
+SELECT
+  phone,
+  CASE
+    WHEN phone LIKE '372%' THEN 'EESTI'
+    ELSE '---'
+  END AS EESTI
+FROM users;
+
+ALTER TABLE users ADD COLUMN haridusasutus TEXT;
+
+SELECT
+  email,
+  CASE
+    WHEN email LIKE '%.gov' 
+    or email LIKE '%.edu' 
+    THEN 'HARIDUSASUTUS'
+    ELSE '---'
+  END AS HARIDUSASUTUS
+FROM users;

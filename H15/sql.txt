@@ -1,0 +1,15 @@
+.open H15/kplaas.db
+
+SELECT last_name FROM users ORDER BY id Limit 3;
+
+UPDATE users
+SET email = 'muudetud@gmail.com',
+phone = 123
+WHERE first_name = 'Keimo'
+RETURNING email, phone;
+
+DELETE FROM users
+WHERE id BETWEEN 5 AND 10
+RETURNING *;
+
+SELECT TOP 10 * FROM users;
