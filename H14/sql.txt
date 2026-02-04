@@ -8,22 +8,22 @@ SELECT * FROM users WHERE first_name LIKE 'g%' AND email LIKE '%.com';
 
 insert into users (first_name, last_name, email, phone, image) values ('Eestlane', 'Feafdhfdh', '346@gmail.com', '37294390436', 'http://dum.com/223x100.png/cc0000/ffffff');
 
-SELECT
-  phone,
+ALTER TABLE users ADD COLUMN EESTI TEXT;
+
+UPDATE users
+SET EESTI =
   CASE
     WHEN phone LIKE '372%' THEN 'EESTI'
     ELSE '---'
-  END AS EESTI
-FROM users;
+  END;
 
 ALTER TABLE users ADD COLUMN haridusasutus TEXT;
 
-SELECT
-  email,
+UPDATE users
+SET haridusasutus =
   CASE
-    WHEN email LIKE '%.gov' 
-    or email LIKE '%.edu' 
+    WHEN email LIKE '%gov%'
+      OR email LIKE '%edu%'
     THEN 'HARIDUSASUTUS'
     ELSE '---'
-  END AS HARIDUSASUTUS
-FROM users;
+  END;
