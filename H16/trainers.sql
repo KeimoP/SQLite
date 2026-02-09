@@ -1,0 +1,10 @@
+insert into trainers (name, speciality, contact) values ('Kari Checchi', 'joga', 'kchecchi0@buzzfeed.com');
+insert into trainers (name, speciality, contact) values ('Hillary Westhoff', 'joga', 'hwesthoff1@squarespace.com');
+insert into trainers (name, speciality, contact) values ('Ian Odney', 'jalgpall', 'iodney2@skype.com');
+insert into trainers (name, speciality, contact) values ('Melisent Meaders', 'sulkpall', 'mmeaders3@php.net');
+insert into trainers (name, speciality, contact) values ('Waiter Divill', 'jalgpall', 'wdivill4@accuweather.com');
+insert into trainers (name, speciality, contact) values ('Sawyer Benion', 'pilates', 'sbenion5@domainmarket.com');
+insert into trainers (name, speciality, contact) values ('Vernor Dayes', 'pilates', 'vdayes6@smh.com.au');
+insert into trainers (name, speciality, contact) values ('Baldwin Stuchberry', 'korvpall', 'bstuchberry7@taobao.com');
+insert into trainers (name, speciality, contact) values ('Danell July', 'pilates', 'djuly8@ucoz.com');
+insert into trainers (name, speciality, contact) values ('Mallissa Hamsher', 'joga', 'mhamsher9@redcross.org');

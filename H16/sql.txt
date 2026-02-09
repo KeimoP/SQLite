@@ -1,0 +1,63 @@
+.open H16/Spordiklubi.db
+
+CREATE TABLE users (
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT UNIQUE NOT NULL,
+    phone TEXT,
+    profile_image TEXT
+);
+
+
+CREATE TABLE trainers (
+    trainer_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    speciality TEXT,
+    contact TEXT
+);
+
+CREATE TABLE sessions (
+    session_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_name TEXT NOT NULL,
+    trainer_id INTEGER NOT NULL,
+    session_date TEXT NOT NULL, -- YYYY-MM-DD
+    FOREIGN KEY (trainer_id) REFERENCES trainers(trainer_id)
+);
+
+CREATE TABLE attendance (
+    user_id INTEGER NOT NULL,
+    session_id INTEGER NOT NULL,
+    status TEXT CHECK (status IN ('kohal', 'puudus', 'hilines')) NOT NULL,
+    PRIMARY KEY (user_id, session_id),
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (session_id) REFERENCES sessions(session_id)
+);
+
+SELECT 
+    u.first_name,
+    u.last_name,
+    a.session_id,
+    a.status
+FROM users u
+JOIN attendance a ON u.user_id = a.user_id
+WHERE a.status = 'kohal';
+
+SELECT 
+    s.session_name,
+    s.session_date,
+    t.name AS trainer_name,
+    t.specialty
+FROM sessions s
+JOIN trainers t ON s.trainer_id = t.trainer_id;
+
+SELECT 
+    u.first_name,
+    u.last_name,
+    s.session_name,
+    s.session_date,
+    a.status
+FROM users u
+JOIN attendance a ON u.user_id = a.user_id
+JOIN sessions s ON a.session_id = s.session_id
+ORDER BY u.last_name, s.session_date;
