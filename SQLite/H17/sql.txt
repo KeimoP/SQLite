@@ -1,7 +1,16 @@
+-- H17: Koondpäringud treenerite ja osalejate kohta (SQLite)
+--
+-- Selles failis on näited:
+-- - COUNT ja GROUP BY kasutamisest
+-- - JOIN-idest tabelite vahel
+-- - SUM(CASE...) koondamiseks
+-- - alampäringust (subquery), et leida "kõige populaarsem" treener
+
+-- SQLite CLI käsk: avab andmebaasi.
 .open H17/Spordiklubi.db
 
 
---Treenerid, kellel on kõige rohkem treeningseansse:
+-- Treenerid, kellel on kõige rohkem treeningseansse:
 
 SELECT 
     t.trainer_id,
@@ -13,7 +22,7 @@ GROUP BY t.trainer_id
 ORDER BY session_count DESC;
 
 
---Treenerid, kellel on kõige rohkem osalejaid (kohal käinuid):
+-- Treenerid, kellel on kõige rohkem osalejaid (ainult "kohal" staatus):
 
 SELECT 
     t.trainer_id,
@@ -27,7 +36,7 @@ GROUP BY t.trainer_id
 ORDER BY total_participants DESC;
 
 
---Seansside arv treeneri kohta:
+-- Seansside arv treeneri kohta:
 
 SELECT 
     trainer_id,
@@ -36,7 +45,7 @@ FROM sessions
 GROUP BY trainer_id;
 
 
---Osalejate arv treeneri kohta (SUM):
+-- Osalejate arv treeneri kohta (SUM + CASE):
 
 SELECT 
     t.trainer_id,
@@ -48,7 +57,7 @@ LEFT JOIN attendance a ON s.session_id = a.session_id
 GROUP BY t.trainer_id;
 
 
---Alampäring: kõige populaarsem treener osalejate arvu järgi:
+-- Alampäring: leia treener(id), kellel on maksimaalne kohalolijate arv.
 
 SELECT 
     t.trainer_id,

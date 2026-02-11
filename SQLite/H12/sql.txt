@@ -1,13 +1,29 @@
+-- H12: Tabeli loomine ja skeemi muutmine (SQLite)
+--
+-- Selles failis:
+-- 1) Avatakse/luuakse andmebaasifail
+-- 2) Luuakse tabel (algne nimi: "kasutajad")
+-- 3) Tehakse ALTER TABLE muudatused (tabeli nimi, veeru nimi, uus veerg)
+
+-- SQLite CLI käsk: avab andmebaasi (kui puudub, luuakse fail).
 .open H12/kplaas.db
 
+-- Loo algne kasutajate tabel.
+-- NB! Veeru "telefon" tüüp on REAL (numbrina). Praktikas on telefon tihti TEXT,
+-- sest võib sisaldada algusnulle, riigikoodi "+372" jne.
 CREATE TABLE kasutajad(
-id INTEGER PRIMARY KEY AUTOINCREMENT,
-first_name TEXT NOT NULL,
-last_name TEXT NOT NULL,
-email TEXT NOT NULL,
-telefon REAL NOT NULL
+id INTEGER PRIMARY KEY AUTOINCREMENT, -- automaatselt kasvav ID
+first_name TEXT NOT NULL,            -- eesnimi
+last_name TEXT NOT NULL,             -- perekonnanimi
+email TEXT NOT NULL,                 -- e-post
+telefon REAL NOT NULL                -- telefon (numbriline)
 );
 
+-- Nimeta tabel ümber ingliskeelseks "users".
 ALTER TABLE kasutajad RENAME TO users;
+
+-- Nimeta veerg "telefon" ümber "phone".
 ALTER TABLE users RENAME COLUMN telefon TO phone;
+
+-- Lisa profiilipildi veerg.
 ALTER TABLE users ADD COLUMN image TEXT;

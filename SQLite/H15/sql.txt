@@ -1,15 +1,30 @@
+-- H15: UPDATE/DELETE koos RETURNING ja valikupäringud (SQLite)
+--
+-- Selles failis:
+-- 1) Tehakse lihtne SELECT + ORDER BY + LIMIT
+-- 2) Uuendatakse kasutaja andmeid (UPDATE) ja tagastatakse muudetud väärtused (RETURNING)
+-- 3) Kustutatakse vahemiku ID-d (DELETE) ja tagastatakse kustutatud read (RETURNING)
+-- 4) On näide "TOP" süntaksist (see on SQL Serveri stiil, SQLite-s ei tööta)
+
+-- SQLite CLI käsk: avab andmebaasi.
 .open H15/kplaas.db
 
+-- Võta 3 esimest perekonnanime ID järgi järjestatult.
 SELECT last_name FROM users ORDER BY id Limit 3;
 
+-- Muuda kasutajal (first_name = 'Keimo') e-posti ja telefoni.
+-- RETURNING tagastab kohe muudetud väljad.
 UPDATE users
 SET email = 'muudetud@gmail.com',
 phone = 123
 WHERE first_name = 'Keimo'
 RETURNING email, phone;
 
+-- Kustuta kasutajad ID vahemikus 5..10 ja tagasta kustutatud read.
 DELETE FROM users
 WHERE id BETWEEN 5 AND 10
 RETURNING *;
 
+-- NB! SQLite ei toeta "SELECT TOP 10" süntaksit.
+-- SQLite-s kasutatakse selle asemel: SELECT * FROM users LIMIT 10;
 SELECT TOP 10 * FROM users;

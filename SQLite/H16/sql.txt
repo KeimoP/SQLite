@@ -1,39 +1,56 @@
+-- H16: Spordiklubi andmemudel + näidispäringud (SQLite)
+--
+-- Selles failis:
+-- 1) Luuakse spordiklubi andmebaasi põhitabelid
+--    - users: kasutajad
+--    - trainers: treenerid
+--    - sessions: treeningseansid
+--    - attendance: osalemised (seos kasutaja <-> seanss)
+-- 2) Tehakse mõned JOIN-päringud osalemise ja seansside kuvamiseks
+
+-- SQLite CLI käsk: avab andmebaasi.
 .open H16/Spordiklubi.db
 
+-- Kasutajad (liikmed).
 CREATE TABLE users (
-    user_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email TEXT UNIQUE NOT NULL,
-    phone TEXT,
-    profile_image TEXT
+    user_id INTEGER PRIMARY KEY AUTOINCREMENT, -- kasutaja unikaalne ID
+    first_name TEXT NOT NULL,                  -- eesnimi
+    last_name TEXT NOT NULL,                   -- perekonnanimi
+    email TEXT UNIQUE NOT NULL,                -- e-post (unikaalne)
+    phone TEXT,                                -- telefon (tekstina, paindlikum)
+    profile_image TEXT                         -- profiilipildi nimi/URL
 );
 
-
+-- Treenerid.
 CREATE TABLE trainers (
-    trainer_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL,
-    speciality TEXT,
-    contact TEXT
+    trainer_id INTEGER PRIMARY KEY AUTOINCREMENT, -- treeneri unikaalne ID
+    name TEXT NOT NULL,                           -- nimi
+    speciality TEXT,                              -- eriala/spetsialiseerumine
+    contact TEXT                                  -- kontaktinfo
 );
 
+-- Treeningseansid: seos treeneriga läbi trainer_id.
 CREATE TABLE sessions (
-    session_id INTEGER PRIMARY KEY AUTOINCREMENT,
-    session_name TEXT NOT NULL,
-    trainer_id INTEGER NOT NULL,
-    session_date TEXT NOT NULL, -- YYYY-MM-DD
+    session_id INTEGER PRIMARY KEY AUTOINCREMENT, -- seansi unikaalne ID
+    session_name TEXT NOT NULL,                   -- seansi nimi
+    trainer_id INTEGER NOT NULL,                  -- viide treenerile
+    session_date TEXT NOT NULL,                   -- kuupäev kujul YYYY-MM-DD
     FOREIGN KEY (trainer_id) REFERENCES trainers(trainer_id)
 );
 
+-- Osalemised: mitme-mitmega seos users <-> sessions.
+-- PRIMARY KEY (user_id, session_id) tagab, et üks kasutaja ei saa samale seansile
+-- mitu korda "kirjas" olla.
 CREATE TABLE attendance (
-    user_id INTEGER NOT NULL,
-    session_id INTEGER NOT NULL,
-    status TEXT CHECK (status IN ('kohal', 'puudus', 'hilines')) NOT NULL,
+    user_id INTEGER NOT NULL, -- viide kasutajale
+    session_id INTEGER NOT NULL, -- viide seansile
+    status TEXT CHECK (status IN ('kohal', 'puudus', 'hilines')) NOT NULL, -- osalemise staatus
     PRIMARY KEY (user_id, session_id),
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (session_id) REFERENCES sessions(session_id)
 );
 
+-- Päring: kõik kohal käinud (status = 'kohal') kasutajad koos seansi ID-ga.
 SELECT 
     u.first_name,
     u.last_name,
@@ -43,6 +60,8 @@ FROM users u
 JOIN attendance a ON u.user_id = a.user_id
 WHERE a.status = 'kohal';
 
+-- Päring: seansid koos treeneri nimega.
+-- NB! Tabelis "trainers" on veeru nimi "speciality" (mitte "specialty").
 SELECT 
     s.session_name,
     s.session_date,
@@ -51,6 +70,7 @@ SELECT
 FROM sessions s
 JOIN trainers t ON s.trainer_id = t.trainer_id;
 
+-- Päring: kasutaja + seanss + kuupäev + staatus, sorteeritud perekonnanime ja kuupäeva järgi.
 SELECT 
     u.first_name,
     u.last_name,

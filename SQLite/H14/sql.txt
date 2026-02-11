@@ -1,15 +1,32 @@
+-- H14: Päringud, sisestused ja tingimuslikud uuendused (SQLite)
+--
+-- Selles failis:
+-- 1) Tehakse SELECT (järjestus + LIMIT)
+-- 2) Lisatakse uusi kasutajaid (INSERT)
+-- 3) Filtreeritakse LIKE abil
+-- 4) Lisatakse uusi veerge (ALTER TABLE)
+-- 5) Täidetakse uued veerud CASE loogikaga (UPDATE)
+
+-- SQLite CLI käsk: avab andmebaasi.
 .open H14/kplaas.db
 
+-- Võta 3 esimest perekonnanime ID järgi järjestatult.
 SELECT last_name FROM users ORDER BY id Limit 3;
 
+-- Lisa üks kasutaja (näidisandmed).
 insert into users (first_name, last_name, email, phone, image) values ('Gabriel', 'Feafdhfdh', '346@gmail.com', '7364346254', 'http://dum.com/223x100.png/cc0000/ffffff');
 
+-- Filtreeri kasutajad: eesnimi algab "g" ja e-post lõpeb ".com".
+-- NB! SQLite LIKE on vaikimisi ASCII-tähecase suhtes tihti case-insensitive (olenevalt kolatsioonist).
 SELECT * FROM users WHERE first_name LIKE 'g%' AND email LIKE '%.com';
 
+-- Lisa kasutaja, kelle telefon algab 372 (Eesti riigikood ilma + märgita).
 insert into users (first_name, last_name, email, phone, image) values ('Eestlane', 'Feafdhfdh', '346@gmail.com', '37294390436', 'http://dum.com/223x100.png/cc0000/ffffff');
 
+-- Lisa veerg "EESTI" (märgend riigikoodi põhjal).
 ALTER TABLE users ADD COLUMN EESTI TEXT;
 
+-- Täida veerg: kui phone algab 372, märgi "EESTI", muidu "---".
 UPDATE users
 SET EESTI =
   CASE
@@ -17,8 +34,10 @@ SET EESTI =
     ELSE '---'
   END;
 
+-- Lisa veerg "haridusasutus" (märgend e-posti domeeni/teksti põhjal).
 ALTER TABLE users ADD COLUMN haridusasutus TEXT;
 
+-- Täida veerg: kui e-post sisaldab "gov" või "edu", märgi "HARIDUSASUTUS".
 UPDATE users
 SET haridusasutus =
   CASE

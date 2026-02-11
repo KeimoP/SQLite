@@ -1,3 +1,7 @@
+# Keimo Plaas
+
+# 11/2/2026
+
 import tkinter as tk
 from tkinter import messagebox
 import sqlite3

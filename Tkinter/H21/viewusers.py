@@ -1,3 +1,17 @@
+"""
+Tkinteri rakendus õpilaste haldamiseks (kool.db).
+
+Funktsionaalsus:
+- Kuvab kõik õpilased tabelis (Treeview)
+- Otsib õpilasi eesnime järgi
+- Lisab uue õpilase (adduser.py kaudu)
+- Uuendab valitud õpilase andmeid
+- Kustutab valitud õpilase
+
+Keimo Plaas
+11/2/2026
+"""
+
 import tkinter as tk
 from tkinter import ttk
 import sqlite3
@@ -93,29 +107,6 @@ def on_update():
     else:
         messagebox.showwarning("Hoiatus", "Vali kõigepealt rida!")
 
-def on_delete():
-    selected_item = tree.selection()
-    if selected_item:
-        record_id = selected_item[0]  # iid (kasutame first_name)
-        confirm = messagebox.askyesno("Kinnita kustutamine", "Kas oled kindel, et soovid selle rea kustutada?")
-        if confirm:
-            try:
-                conn = sqlite3.connect('kool.db')
-                cursor = conn.cursor()
-               
-                # Kustuta kirje eesnime järgi
-                cursor.execute("DELETE FROM users WHERE first_name=?", (record_id,))
-                conn.commit()
-                conn.close()
-               
-                load_data_from_db(tree)
-                messagebox.showinfo("Edukalt kustutatud", "Rida on edukalt kustutatud!")
-            except sqlite3.Error as e:
-                messagebox.showerror("Viga", f"Andmebaasi viga: {e}")
-    else:
-        messagebox.showwarning("Valik puudub", "Palun vali kõigepealt rida!")
-
-
 # --- GUI ---
 root = tk.Tk()
 root.title("Kooli Õpilased")
@@ -145,9 +136,6 @@ open_button.pack(side=tk.LEFT, padx=5)
 
 update_button = tk.Button(root, text="Uuenda", command=on_update)
 update_button.pack(side=tk.LEFT, padx=5)
-
-delete_button = tk.Button(buttons_frame, text="Kustuta", command=on_delete)
-delete_button.pack(side=tk.LEFT, padx=5)
 
 frame = tk.Frame(root)
 frame.pack(pady=20, fill=tk.BOTH, expand=True)
