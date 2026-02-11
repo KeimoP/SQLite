@@ -1,0 +1,72 @@
+.open H17/Spordiklubi.db
+
+
+--Treenerid, kellel on kõige rohkem treeningseansse:
+
+SELECT 
+    t.trainer_id,
+    t.name,
+    COUNT(s.session_id) AS session_count
+FROM trainers t
+JOIN sessions s ON t.trainer_id = s.trainer_id
+GROUP BY t.trainer_id
+ORDER BY session_count DESC;
+
+
+--Treenerid, kellel on kõige rohkem osalejaid (kohal käinuid):
+
+SELECT 
+    t.trainer_id,
+    t.name,
+    COUNT(a.user_id) AS total_participants
+FROM trainers t
+JOIN sessions s ON t.trainer_id = s.trainer_id
+JOIN attendance a ON s.session_id = a.session_id
+WHERE a.status = 'kohal'
+GROUP BY t.trainer_id
+ORDER BY total_participants DESC;
+
+
+--Seansside arv treeneri kohta:
+
+SELECT 
+    trainer_id,
+    COUNT(*) AS session_count
+FROM sessions
+GROUP BY trainer_id;
+
+
+--Osalejate arv treeneri kohta (SUM):
+
+SELECT 
+    t.trainer_id,
+    t.name,
+    SUM(CASE WHEN a.status = 'kohal' THEN 1 ELSE 0 END) AS participant_sum
+FROM trainers t
+JOIN sessions s ON t.trainer_id = s.trainer_id
+LEFT JOIN attendance a ON s.session_id = a.session_id
+GROUP BY t.trainer_id;
+
+
+--Alampäring: kõige populaarsem treener osalejate arvu järgi:
+
+SELECT 
+    t.trainer_id,
+    t.name,
+    COUNT(a.user_id) AS total_participants
+FROM trainers t
+JOIN sessions s ON t.trainer_id = s.trainer_id
+JOIN attendance a ON s.session_id = a.session_id
+WHERE a.status = 'kohal'
+GROUP BY t.trainer_id
+HAVING total_participants = (
+    SELECT MAX(participant_count)
+    FROM (
+        SELECT 
+            COUNT(a2.user_id) AS participant_count
+        FROM sessions s2
+        JOIN attendance a2 ON s2.session_id = a2.session_id
+        WHERE a2.status = 'kohal'
+        GROUP BY s2.trainer_id
+    )
+);

@@ -4,7 +4,7 @@
 `sqlite3.exe` on alla laaditud ja asub peakasutas
 
 ## SQLite3 käivitamine
-Ava sqlite3.exe
+Ava SQlite/sqlite3.exe
 
 ## Vali mis andmebaasi tahad kasutada
 - vali mis ülessande andmebaasi tahad avada

@@ -248,3 +248,4 @@ insert into users (first_name, last_name, email, phone, image) values ('Fayth', 
 insert into users (first_name, last_name, email, phone, image) values ('Marita', 'Rasell', 'mrasell6v@quantcast.com', '2444394685', 'http://dummyimage.com/167x100.png/5fa2dd/ffffff');
 insert into users (first_name, last_name, email, phone, image) values ('Drugi', 'Harmer', 'dharmer6w@nih.gov', '9471287942', 'http://dummyimage.com/226x100.png/cc0000/ffffff');
 insert into users (first_name, last_name, email, phone, image) values ('Emory', 'Featherstonhaugh', 'efeatherstonhaugh6x@irs.gov', '7364346217', 'http://dummyimage.com/223x100.png/cc0000/ffffff');
+insert into users (first_name, last_name, email, phone, image) values ('Gabriel', 'Feafdhfdh', '346@gmail.com', '7364346254', 'http://dum.com/223x100.png/cc0000/ffffff');

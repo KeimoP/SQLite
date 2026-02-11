@@ -1,0 +1,18 @@
+.open H13/kplaas.db
+
+CREATE TABLE kasutajad(
+id INTEGER PRIMARY KEY AUTOINCREMENT,
+first_name TEXT NOT NULL,
+last_name TEXT NOT NULL,
+email TEXT NOT NULL,
+telefon REAL NOT NULL
+);
+
+ALTER TABLE kasutajad RENAME TO users;
+ALTER TABLE users RENAME COLUMN telefon TO phone;
+ALTER TABLE users ADD COLUMN image TEXT;
+INSERT INTO users (first_name, last_name, email, phone, image)
+VALUES ('Keimo','Plaas','keimo.plaas22@gmail.com','56192547','keimo.jpg');
+
+INSERT INTO users (first_name, last_name, email, phone, image)
+VALUES ('Karin','Eegrid','karineegrid@gmail.com','688673','neegeros.jpg');

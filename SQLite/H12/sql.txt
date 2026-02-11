@@ -8,7 +8,6 @@ email TEXT NOT NULL,
 telefon REAL NOT NULL
 );
 
---fdhfjk
 ALTER TABLE kasutajad RENAME TO users;
 ALTER TABLE users RENAME COLUMN telefon TO phone;
 ALTER TABLE users ADD COLUMN image TEXT;
